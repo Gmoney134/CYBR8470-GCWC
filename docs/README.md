@@ -17,7 +17,12 @@ As a **Malicious-user**, I want to **input false or unrealistic data** so I can 
 
 **Malicious-user:** I will be done protecting against this mis-user story when there is appropriate error handling for unrealistic data such that the calculation algorithm cannot be exploited.
 
+# C4 Diagram
+### Context Diagram
 ![Context Diagram](./images/GCWC-Context%20Diagram.jpg)
+### Container Diagram
 ![Container Diagram](./images/GCWC-Container%20Diagram.jpg)
+### Backend Diagram
 ![Backend Diagram](./images/GCWC-Component%20Diagram%20(backend%20API).jpg)
+### Single Page Application Diagram
 ![Single Page Application Diagram](./images/GCWC-Component%20Diagram%20(Single%20Page%20Aplication).jpg)
