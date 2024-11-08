@@ -17,4 +17,6 @@ As a **Malicious-user**, I want to **input false or unrealistic data** so I can 
 
 **Malicious-user:** I will be done protecting against this mis-user story when there is appropriate error handling for unrealistic data such that the calculation algorithm cannot be exploited.
 
-![Example Image](images/GCWC-Context Diagram.jpg)
+![Example Image](images/example.jpg)
+
+![Context Diagram](/Users/gmoney/Documents/8470-UNO/CYBR8470-GCWC/docs/images/GCWC-Context Diagram.jpg)
