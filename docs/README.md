@@ -26,3 +26,11 @@ As a **Malicious-user**, I want to **input false or unrealistic data** so I can 
 ![Backend Diagram](./images/GCWC-Component%20Diagram%20(backend%20API).jpg)
 ### Single Page Application Diagram
 ![Single Page Application Diagram](./images/GCWC-Component%20Diagram%20(Single%20Page%20Aplication).jpg)
+
+# Mock Up Diagram
+### Login Page
+![login page](./images/GCWC_LoginPage.jpg)
+### Home Page
+![Home Page](./images/GCWC_HomePage.jpg)
+### Profile Page
+![Profile Page](./images/GCWC_ProfilePage.jpg)
