@@ -16,3 +16,5 @@ As a **Malicious-user**, I want to **input false or unrealistic data** so I can 
 **Hacker:** I will be done protecting against this mis-user story when there is a secure authentication system implemented and location data is secure.
 
 **Malicious-user:** I will be done protecting against this mis-user story when there is appropriate error handling for unrealistic data such that the calculation algorithm cannot be exploited.
+
+![Example Image](images/GCWC-Context Diagram.jpg)
