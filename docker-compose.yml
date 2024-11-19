@@ -24,6 +24,20 @@ services:
       - "5432:5432"
     volumes:
       - data:/var/lib/postgresql/data
-      
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: frontend
+    ports:
+      - "3000:3000" # Default Next.js port
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    command: npm run dev
+    depends_on:
+      - backend
+    restart: always 
+    
 volumes:
   data:
