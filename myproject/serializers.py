@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
+from .models import GolfClub
 
 # class for user creation and login
 class UserSerializer(serializers.ModelSerializer):
@@ -15,3 +16,9 @@ class UserSerializer(serializers.ModelSerializer):
             password=validated_data['password']
         )
         return user
+    
+class GolfClubSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GolfClub
+        fields = ['id', 'club_name', 'distance', 'user']
+        extra_kwargs = {'user': {'read_only': True}}
