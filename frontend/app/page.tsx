@@ -1,9 +1,11 @@
 import { redirect } from 'next/navigation';
+import { cookies } from 'next/headers';
 
 const API_BASE_URL = 'http://backend:8000';
 
 export async function handleLogin(formData: any[]) {
   'use server';
+  let redirectPath: string | null = null
 
   const { username, password } = Object.fromEntries(formData.entries());
   const loginUrl = `${API_BASE_URL}/GCWC/login/`;
@@ -27,12 +29,24 @@ export async function handleLogin(formData: any[]) {
     }
 
     const data = await response.json();
-    document.cookie = `token=${data.access}; Path=/; HttpOnly;`;
-    redirect('/profile'); // Redirect to the profile page upon successful login
+
+    // Set the cookie securely
+    (await
+      cookies()).set('token', data.access, {
+      path: '/',
+      httpOnly: true,
+    });
+
+    redirectPath = `/profile`
   } catch (error) {
     console.error('Login failed:', error); // Log the full error object
     throw new Error(`Error during login: ${error.message || 'Unknown error'}. Check console for details.`);
-  }
+    redirectPath = `/`
+  } finally {
+    //Clear resources
+    if (redirectPath)
+        redirect(redirectPath)
+}
 }
 
 export default function LoginPage() {
