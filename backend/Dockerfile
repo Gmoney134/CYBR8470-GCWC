@@ -3,6 +3,7 @@ FROM python:3.11
 
 RUN apt-get update && apt-get install -y tzdata
 RUN pip install psycopg2-binary
+RUN pip install django-cors-headers
 
 # Set the working directory in the container.
 WORKDIR /app

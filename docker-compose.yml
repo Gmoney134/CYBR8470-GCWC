@@ -13,6 +13,8 @@ services:
     depends_on:
       - db
     restart: always
+    networks:
+      - app-network
 
   db:
     image: postgres
@@ -24,6 +26,8 @@ services:
       - "5432:5432"
     volumes:
       - data:/var/lib/postgresql/data
+    networks:
+      - app-network
 
   frontend:
     build:
@@ -37,7 +41,12 @@ services:
     command: npm run dev
     depends_on:
       - backend
-    restart: always 
+    restart: always
+    networks:
+      - app-network
     
 volumes:
   data:
+
+networks:
+  app-network:
