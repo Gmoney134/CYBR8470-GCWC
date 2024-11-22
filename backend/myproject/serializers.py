@@ -20,5 +20,12 @@ class UserSerializer(serializers.ModelSerializer):
 class GolfClubSerializer(serializers.ModelSerializer):
     class Meta:
         model = GolfClub
-        fields = ['id', 'club_name', 'distance', 'user']
-        extra_kwargs = {'user': {'read_only': True}}
+        fields = ['id', 'club_name', 'distance',]
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    golf_clubs = GolfClubSerializer(many=True)
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'golf_clubs']
+        

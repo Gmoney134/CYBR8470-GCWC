@@ -2,9 +2,10 @@ from django.contrib.auth.models import User
 from rest_framework import viewsets, permissions
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from .serializers import UserSerializer
+from rest_framework.viewsets import ViewSet
+from rest_framework import status # type: ignore
+from .serializers import UserSerializer, GolfClubSerializer, UserProfileSerializer
 from .models import GolfClub
-from .serializers import GolfClubSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -35,19 +36,43 @@ class AdminViewSet(viewsets.ViewSet):
         serializer = UserSerializer(users, many=True)
         return Response(serializer.data)
 
-
-class GolfClubViewSet(viewsets.ModelViewSet):
-    """
-    ViewSet for managing golf clubs.
-    """
-    serializer_class = GolfClubSerializer
+class ProfileViewSet(ViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
-    def get_queryset(self):
-        # Restrict golf clubs to those belonging to the authenticated user
-        return GolfClub.objects.filter(user=self.request.user)
+    def list(self, request):
+        """Get the user's profile information."""
+        user = request.user
+        serializer = UserProfileSerializer(user)
+        return Response(serializer.data)
 
-    def perform_create(self, serializer):
-        # Automatically assign the authenticated user as the owner
-        serializer.save(user=self.request.user)
+    def create(self, request):
+        """Add a new golf club to the user's bag."""
+        serializer = GolfClubSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(user=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def update(self, request, pk=None):
+        """Edit an existing golf club in the user's bag."""
+        try:
+            golf_club = GolfClub.objects.get(pk=pk, user=request.user)
+        except GolfClub.DoesNotExist:
+            return Response({"detail": "Golf club not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = GolfClubSerializer(golf_club, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def destroy(self, request, pk=None):
+        """Remove a golf club from the user's bag."""
+        try:
+            golf_club = GolfClub.objects.get(pk=pk, user=request.user)
+        except GolfClub.DoesNotExist:
+            return Response({"detail": "Golf club not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        golf_club.delete()
+        return Response({"detail": "Golf club removed."}, status=status.HTTP_204_NO_CONTENT)
 
