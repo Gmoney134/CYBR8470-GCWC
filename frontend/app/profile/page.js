@@ -1,4 +1,5 @@
 import { cookies } from 'next/headers';
+import Link from 'next/link';
 
 const API_BASE_URL = 'http://backend:8000';
 
@@ -47,6 +48,9 @@ export default async function ProfilePage() {
       ) : (
         <p>No golf clubs in your bag.</p>
       )}
+      <div style={{ marginTop: '20px' }}>
+        <Link href="/calculations">Go to Weather Calculations</Link>
+      </div>
     </div>
   );
 }
