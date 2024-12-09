@@ -28,4 +28,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username', 'email', 'golf_clubs']
-        
+
+class GolfClubCalculationSerializer(serializers.Serializer):
+    club_name = serializers.CharField()
+    original_distance = serializers.FloatField()
+    adjusted_distance = serializers.FloatField()       
