@@ -7,6 +7,7 @@ from rest_framework import status # type: ignore
 from .serializers import UserSerializer, GolfClubSerializer, UserProfileSerializer, GolfClubCalculationSerializer
 from .models import GolfClub
 import math
+import re
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -76,14 +77,36 @@ class ProfileViewSet(ViewSet):
 
         golf_club.delete()
         return Response({"detail": "Golf club removed."}, status=status.HTTP_204_NO_CONTENT)
+    
+def parse_windSpeed(windSpeed_input):
+    """
+    Parse wind speed input and return the average wind speed as a float.
 
-def calculate_wind_adjustment(wind_speed, wind_direction, facing_direction):
+    Parameters:
+    - windSpeed_input (str): Wind speed in formats like '12 mph' or '8 to 12 mph'.
+
+    Returns:
+    - float: Average wind speed.
+    """
+    try:
+        # Match ranges like "8 to 12 mph" or single values like "12 mph"
+        match = re.match(r"(\d+)(?:\s*to\s*(\d+))?\s*mph", windSpeed_input.lower())
+        if not match:
+            raise ValueError("Invalid wind speed format. Use formats like '12 mph' or '8 to 12 mph'.")
+
+        lower_speed = float(match.group(1))
+        upper_speed = float(match.group(2)) if match.group(2) else lower_speed
+        return (lower_speed + upper_speed) / 2  # Return average speed for ranges
+    except Exception as e:
+        raise ValueError(f"Error parsing wind speed: {e}")
+
+def calculate_wind_adjustment(windSpeed, windDirection, facing_direction):
     direction_map = {
         "N": 0, "NE": 45, "E": 90, "SE": 135,
         "S": 180, "SW": 225, "W": 270, "NW": 315
     }
 
-    wind_deg = direction_map.get(wind_direction.upper(), None)
+    wind_deg = direction_map.get(windDirection.upper(), None)
     facing_deg = direction_map.get(facing_direction.upper(), None)
 
     if wind_deg is None or facing_deg is None:
@@ -99,23 +122,23 @@ def calculate_wind_adjustment(wind_speed, wind_direction, facing_direction):
     else:
         impact_factor = math.cos(math.radians(angle_diff)) * 1.5
 
-    return wind_speed * impact_factor
+    return windSpeed * impact_factor
 
-def calculate_adjusted_distance(base_distance, temperature, wind_speed, wind_direction, facing_direction, humidity):
+def calculate_adjusted_distance(base_distance, temperature, windSpeed, windDirection, facing_direction, humidity):
     temperature_adjustment = (temperature - 70) * 0.2
     humidity_adjustment = (humidity - 50) * 0.02
-    wind_adjustment = calculate_wind_adjustment(wind_speed, wind_direction, facing_direction)
+    wind_adjustment = calculate_wind_adjustment(windSpeed, windDirection, facing_direction)
     total_adjustment = temperature_adjustment + humidity_adjustment + wind_adjustment
     adjusted_distance = base_distance + total_adjustment
     return adjusted_distance
 
-def calculate_adjusted_distances_for_all_directions(base_distance, temperature, wind_speed, wind_direction, humidity):
+def calculate_adjusted_distances_for_all_directions(base_distance, temperature, windSpeed, windDirection, humidity):
     directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
     results = {}
 
     for facing_direction in directions:
         adjusted_distance = calculate_adjusted_distance(
-            base_distance, temperature, wind_speed, wind_direction, facing_direction, humidity
+            base_distance, temperature, windSpeed, windDirection, facing_direction, humidity
         )
         results[facing_direction] = round(adjusted_distance, 2)
 
@@ -129,8 +152,8 @@ class CalculationsViewSet(ViewSet):
         Calculate adjusted distances for the user's golf clubs.
         Input:
         - temperature (float): Current temperature (°F).
-        - wind_speed (float): Wind speed (mph).
-        - wind_direction (str): Direction the wind is blowing (e.g., 'N', 'NE').
+        - windSpeed (float): Wind speed (mph).
+        - windDirection (str): Direction the wind is blowing (e.g., 'N', 'NE').
         - facing_direction (str): Direction the golfer is facing (e.g., 'N', 'NE').
         - humidity (float): Relative humidity as a percentage (0-100).
 
@@ -145,22 +168,22 @@ class CalculationsViewSet(ViewSet):
 
         # Input weather conditions
         temperature = request.data.get('temperature')
-        wind_speed = request.data.get('wind_speed')
-        wind_direction = request.data.get('wind_direction')
+        windSpeed_input = request.data.get('windSpeed')
+        windDirection = request.data.get('windDirection')
         humidity = request.data.get('humidity')
 
-        if not all([temperature, wind_speed, wind_direction, humidity]):
+        if not all([temperature, windSpeed_input, windDirection, humidity]):
             return Response({"detail": "All weather inputs are required."}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             temperature = float(temperature)
-            wind_speed = float(wind_speed)
+            windSpeed = parse_windSpeed(windSpeed_input)
             humidity = float(humidity)
 
             adjusted_clubs = []
             for club in golf_clubs:
                 adjusted_distance = calculate_adjusted_distances_for_all_directions(
-                    club.distance, temperature, wind_speed, wind_direction, humidity
+                    club.distance, temperature, windSpeed, windDirection, humidity
                 )
                 adjusted_clubs.append({
                     "club_name": club.club_name,

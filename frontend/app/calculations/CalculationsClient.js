@@ -2,33 +2,13 @@
 
 import { useEffect, useState } from 'react';
 
-const API_BASE_URL = 'http://backend:8000';
+const API_BASE_URL = 'http://localhost:8000';
 
-export default function CalculationsPage() {
+export default function CalculationsPage({ token }) {
   const [location, setLocation] = useState(null);
   const [weatherData, setWeatherData] = useState(null);
-  const [golfClubs, setGolfClubs] = useState([]);
+  const [adjustedDistances, setAdjustedDistances] = useState([]);
   const [error, setError] = useState(null);
-
-  const fetchUserData = async (token) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/profile/`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`Profile API request failed with status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      setGolfClubs(data.golf_clubs);
-    } catch (err) {
-      console.error('Error fetching golf clubs:', err.message);
-      setError('Failed to fetch golf clubs.');
-    }
-  };
 
   const fetchWeatherData = async (latitude, longitude) => {
     try {
@@ -86,7 +66,6 @@ export default function CalculationsPage() {
       // Update weather data state
       setWeatherData({
         temperature: currentPeriod.temperature,
-        temperatureUnit: currentPeriod.temperatureUnit,
         windSpeed: currentPeriod.windSpeed,
         windDirection: currentPeriod.windDirection || 'N/A',
         humidity,
@@ -97,10 +76,42 @@ export default function CalculationsPage() {
     }
   };
   
+  const fetchAdjustedDistances = async () => {
+    if (!weatherData) {
+      setError('Weather data is not available.');
+      return;
+    }
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/GCWC/calculations/`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(weatherData),
+      });
+
+      if (!response.ok) {
+        console.error('Response status:', response.status);
+        console.error('Response body:', await response.text());
+        throw new Error(`Calculations API request failed with status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log('Adjusted distances:', data); // Debugging output
+      setAdjustedDistances(data.golf_clubs);
+    } catch (err) {
+      console.error('Error fetching adjusted distances:', err.message);
+      setError(err.message);
+    }
+  };
 
   useEffect(() => {
-    fetchUserData(); // Fetch user's golf clubs
+    console.log('Updated adjustedDistances:', adjustedDistances); // Log updated state
+  }, [adjustedDistances]);
 
+  useEffect(() => {
     if ('geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -118,6 +129,12 @@ export default function CalculationsPage() {
     }
   }, []);
 
+  useEffect(() => {
+    if (weatherData) {
+      fetchAdjustedDistances();
+    }
+  }, [weatherData]);
+
   return (
     <div>
       <h1>Weather Calculations</h1>
@@ -131,7 +148,7 @@ export default function CalculationsPage() {
         <div>
           <h2>Current Weather</h2>
           <p>
-            <strong>Temperature:</strong> {weatherData.temperature} {weatherData.temperatureUnit}
+            <strong>Temperature:</strong> {weatherData.temperature} F
           </p>
           <p>
             <strong>Wind Speed:</strong> {weatherData.windSpeed}
@@ -146,18 +163,33 @@ export default function CalculationsPage() {
       ) : (
         !error && <p>Loading weather data...</p>
       )}
-      <h2>Your Golf Clubs</h2>
-      {golfClubs.length > 0 ? (
+      {adjustedDistances.length > 0 ? (
+      <div>
+        <h2>Adjusted Distances</h2>
         <ul>
-          {golfClubs.map((club) => (
-            <li key={club.id}>
-              {club.club_name} - {club.distance} yards
+          {adjustedDistances.map((club, index) => (
+            <li key={index}>
+              <strong>{club.club_name}</strong>:
+              <ul>
+                <li>Original Distance: {club.original_distance} yards</li>
+                <li>
+                  Adjusted Distances:
+                  <ul>
+                    {Object.entries(club.adjusted_distance).map(([direction, distance]) => (
+                      <li key={direction}>
+                        {direction}: {distance} yards
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              </ul>
             </li>
           ))}
         </ul>
-      ) : (
-        <p>No golf clubs in your bag.</p>
-      )}
+      </div>
+    ) : (
+      !error && <p>Loading adjusted distances...</p>
+    )}
     </div>
   );
 }
