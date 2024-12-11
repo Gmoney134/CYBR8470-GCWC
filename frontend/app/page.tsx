@@ -1,5 +1,7 @@
 import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
+import Link from 'next/link';
+
 
 const API_BASE_URL = 'http://backend:8000';
 
@@ -58,6 +60,9 @@ export default function LoginPage() {
         <input type="password" name="password" placeholder="Password" required />
         <button type="submit">Login</button>
       </form>
+      <p>
+        Don't have an account? <Link href="/register">Register here</Link>
+      </p>
     </div>
   );
 }
