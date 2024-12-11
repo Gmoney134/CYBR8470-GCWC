@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.viewsets import ViewSet
 from rest_framework import status # type: ignore
-from .serializers import UserSerializer, GolfClubSerializer, UserProfileSerializer
+from .serializers import UserSerializer, GolfClubSerializer, UserProfileSerializer, GolfClubCalculationSerializer
 from .models import GolfClub
 import math
 
@@ -109,6 +109,18 @@ def calculate_adjusted_distance(base_distance, temperature, wind_speed, wind_dir
     adjusted_distance = base_distance + total_adjustment
     return adjusted_distance
 
+def calculate_adjusted_distances_for_all_directions(base_distance, temperature, wind_speed, wind_direction, humidity):
+    directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
+    results = {}
+
+    for facing_direction in directions:
+        adjusted_distance = calculate_adjusted_distance(
+            base_distance, temperature, wind_speed, wind_direction, facing_direction, humidity
+        )
+        results[facing_direction] = round(adjusted_distance, 2)
+
+    return results
+
 class CalculationsViewSet(ViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
@@ -135,10 +147,9 @@ class CalculationsViewSet(ViewSet):
         temperature = request.data.get('temperature')
         wind_speed = request.data.get('wind_speed')
         wind_direction = request.data.get('wind_direction')
-        facing_direction = request.data.get('facing_direction')
         humidity = request.data.get('humidity')
 
-        if not all([temperature, wind_speed, wind_direction, facing_direction, humidity]):
+        if not all([temperature, wind_speed, wind_direction, humidity]):
             return Response({"detail": "All weather inputs are required."}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
@@ -148,15 +159,16 @@ class CalculationsViewSet(ViewSet):
 
             adjusted_clubs = []
             for club in golf_clubs:
-                adjusted_distance = calculate_adjusted_distance(
-                    club.distance, temperature, wind_speed, wind_direction, facing_direction, humidity
+                adjusted_distance = calculate_adjusted_distances_for_all_directions(
+                    club.distance, temperature, wind_speed, wind_direction, humidity
                 )
                 adjusted_clubs.append({
                     "club_name": club.club_name,
                     "original_distance": club.distance,
-                    "adjusted_distance": round(adjusted_distance, 2),
+                    "adjusted_distance": adjusted_distance,
                 })
 
+            serializer = GolfClubCalculationSerializer(adjusted_clubs, many=True)
             return Response({"golf_clubs": adjusted_clubs}, status=status.HTTP_200_OK)
 
         except ValueError as e:

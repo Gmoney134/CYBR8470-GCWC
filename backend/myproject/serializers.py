@@ -32,4 +32,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 class GolfClubCalculationSerializer(serializers.Serializer):
     club_name = serializers.CharField()
     original_distance = serializers.FloatField()
-    adjusted_distance = serializers.FloatField()       
+    adjusted_distances = serializers.DictField(
+        child=serializers.FloatField(),  # Maps each direction to its adjusted distance
+        help_text="Adjusted distances for all directions."
+    )       
