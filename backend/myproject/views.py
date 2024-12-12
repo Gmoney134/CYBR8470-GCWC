@@ -102,15 +102,29 @@ def parse_windSpeed(windSpeed_input):
 
 def calculate_wind_adjustment(windSpeed, windDirection, facing_direction):
     direction_map = {
-        "N": 0, "NE": 45, "E": 90, "SE": 135,
-        "S": 180, "SW": 225, "W": 270, "NW": 315
+        "N": 0,
+        "NNE": 22.5, 
+        "NE": 45,
+        "ENE": 67.5, 
+        "E": 90,
+        "ESE": 112.5, 
+        "SE": 135,
+        "SSE": 157.5,
+        "S": 180,
+        "SSW": 202.5, 
+        "SW": 225,
+        "WSW": 247.5, 
+        "W": 270, 
+        "WNW": 292.5,
+        "NW": 315,
+        "NNW": 337.5
     }
 
     wind_deg = direction_map.get(windDirection.upper(), None)
     facing_deg = direction_map.get(facing_direction.upper(), None)
 
     if wind_deg is None or facing_deg is None:
-        raise ValueError("Invalid wind or facing direction. Use N, NE, E, SE, S, SW, W, NW.")
+        raise ValueError("Invalid wind or facing direction. Use N, NNE, NE, ENE, E, ESE, SE, SSE, S, SSW, SW, WSW, W, WNW, NW, NNW.")
 
     angle_diff = abs(wind_deg - facing_deg)
     angle_diff = min(angle_diff, 360 - angle_diff)
@@ -133,7 +147,7 @@ def calculate_adjusted_distance(base_distance, temperature, windSpeed, windDirec
     return adjusted_distance
 
 def calculate_adjusted_distances_for_all_directions(base_distance, temperature, windSpeed, windDirection, humidity):
-    directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
+    directions = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"]
     results = {}
 
     for facing_direction in directions:
