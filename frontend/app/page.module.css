@@ -1,0 +1,44 @@
+/* Center the content of the login page */
+.pageContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 2rem;
+    gap: 1.5rem;
+  }
+  
+  /* Style for the application title */
+  .title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    text-shadow: var(--box-shadow);
+  }
+  
+  /* Style for the application description */
+  .description {
+    font-size: 1.25rem;
+    color: var(--color-muted);
+    text-align: center;
+    max-width: 600px;
+    line-height: 1.6;
+  }
+  
+  /* Form container for better spacing */
+  .formContainer {
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  .logo {
+    width: 300px; /* Adjust width to suit the design */
+    height: auto;
+    display: block;
+  }
+  

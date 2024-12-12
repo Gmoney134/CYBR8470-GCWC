@@ -2,23 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Apply a modern, clean font */
+/* Import Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
 
-/* Base styles for the entire app */
+/* Base variables for the theme */
 :root {
   --font-primary: 'Inter', sans-serif;
-  --color-primary: #007acc; /* Primary accent color */
-  --color-secondary: #005f99; /* Secondary accent color */
-  --color-bg: #f9f9f9; /* Light background color */
+  --color-primary: #28a745; /* Modern green accent color */
+  --color-secondary: #218838; /* Slightly darker green */
+  --color-bg: #e9f7ec; /* Light green background color */
   --color-text: #333333; /* Dark text color */
   --color-muted: #888888; /* Muted text color */
+  --color-white: #ffffff; /* White for cards and buttons */
   --border-radius: 8px;
   --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --box-shadow-hover: 0 6px 8px rgba(0, 0, 0, 0.15);
   --transition-speed: 0.3s;
 }
 
-/* Reset default styles and set up box-sizing */
+/* Universal reset */
 *,
 *::before,
 *::after {
@@ -27,7 +29,7 @@
   box-sizing: border-box;
 }
 
-/* HTML and body styles */
+/* General HTML and body styling */
 html {
   font-size: 16px;
 }
@@ -61,13 +63,15 @@ button {
   border-radius: var(--border-radius);
   cursor: pointer;
   background-color: var(--color-primary);
-  color: #ffffff;
-  transition: background-color var(--transition-speed), transform var(--transition-speed);
+  color: var(--color-white);
+  box-shadow: var(--box-shadow);
+  transition: background-color var(--transition-speed), transform var(--transition-speed), box-shadow var(--transition-speed);
 }
 
 button:hover {
   background-color: var(--color-secondary);
-  transform: scale(1.05);
+  transform: translateY(-2px);
+  box-shadow: var(--box-shadow-hover);
 }
 
 /* Inputs */
@@ -79,12 +83,28 @@ textarea {
   border: 1px solid var(--color-muted);
   border-radius: var(--border-radius);
   outline: none;
-  transition: border-color var(--transition-speed);
+  box-shadow: var(--box-shadow);
+  transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
 }
 
 input:focus,
 textarea:focus {
   border-color: var(--color-primary);
+  box-shadow: var(--box-shadow-hover);
+}
+
+/* Cards */
+.card {
+  background-color: var(--color-white);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: 1.5rem;
+  transition: box-shadow var(--transition-speed), transform var(--transition-speed);
+}
+
+.card:hover {
+  box-shadow: var(--box-shadow-hover);
+  transform: translateY(-2px);
 }
 
 /* Utility classes */
@@ -92,13 +112,6 @@ textarea:focus {
   max-width: 1200px;
   margin: 0 auto;
   padding: 1rem;
-}
-
-.card {
-  background-color: #ffffff;
-  border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow);
-  padding: 1.5rem;
 }
 
 .flex {
@@ -117,7 +130,7 @@ textarea:focus {
   text-align: center;
 }
 
-/* Scrollbar styles */
+/* Custom Scrollbar */
 body::-webkit-scrollbar {
   width: 12px;
 }
@@ -129,4 +142,21 @@ body::-webkit-scrollbar-thumb {
 
 body::-webkit-scrollbar-thumb:hover {
   background-color: var(--color-primary);
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 1rem;
+}
+
+/* Shadows for depth */
+.shadow {
+  box-shadow: var(--box-shadow);
+  transition: box-shadow var(--transition-speed);
+}
+
+.shadow:hover {
+  box-shadow: var(--box-shadow-hover);
 }

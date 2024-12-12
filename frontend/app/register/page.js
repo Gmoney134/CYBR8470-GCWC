@@ -1,4 +1,5 @@
 import { redirect } from 'next/navigation';
+import styles from '../page.module.css';
 
 export default async function RegisterPage() {
   async function handleRegister(data) {
@@ -24,8 +25,8 @@ export default async function RegisterPage() {
   }
 
   return (
-    <div>
-      <h1>Register</h1>
+    <div className={styles.pageContainer}>
+      <h1 className={styles.title}>Register</h1>
       <form action={handleRegister}>
         <input type="text" name="username" placeholder="Username" required />
         <input type="email" name="email" placeholder="Email" required />

@@ -1,7 +1,9 @@
 import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
-
+import styles from './page.module.css';
+import logo from './GCWC_logo.png'
+import Image from 'next/image';
 
 const API_BASE_URL = 'http://backend:8000';
 
@@ -53,8 +55,16 @@ export async function handleLogin(formData: any[]) {
 
 export default function LoginPage() {
   return (
-    <div>
-      <h1>Login</h1>
+    <div className={styles.pageContainer}>
+      {/* Logo */}
+      <Image src={logo} alt="GCWC Logo" className={styles.logo} />
+      {/* Application Description */}
+      <p className={styles.description}>
+        Welcome to the Golf Club Weather Calculator. Log in to adjust your golf club distances based on real-time weather conditions and optimize your game.
+      </p>
+
+      {/* Login Form */}
+      <div className={styles.formContainer}>
       <form action={handleLogin}>
         <input type="text" name="username" placeholder="Username" required />
         <input type="password" name="password" placeholder="Password" required />
@@ -63,6 +73,7 @@ export default function LoginPage() {
       <p>
         Don't have an account? <Link href="/register">Register here</Link>
       </p>
+      </div>
     </div>
   );
 }
