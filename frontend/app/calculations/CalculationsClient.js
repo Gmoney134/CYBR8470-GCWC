@@ -9,6 +9,8 @@ export default function CalculationsPage({ token }) {
   const [weatherData, setWeatherData] = useState(null);
   const [adjustedDistances, setAdjustedDistances] = useState([]);
   const [error, setError] = useState(null);
+  const [hasGolfClubs, setHasGolfClubs] = useState(true);
+  
 
   const fetchWeatherData = async (latitude, longitude) => {
     try {
@@ -90,22 +92,25 @@ export default function CalculationsPage({ token }) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(weatherData),
-      });
-
+      }); 
       if (!response.ok) {
-        console.error('Response status:', response.status);
-        console.error('Response body:', await response.text());
+        const errorText = await response.text();
+        console.error('Response body:', errorText);
+        if (response.status === 404 && errorText.includes('No golf clubs')) {
+          setHasGolfClubs(false); // Update state to indicate no golf clubs
+          return;
+        }
         throw new Error(`Calculations API request failed with status: ${response.status}`);
       }
 
       const data = await response.json();
-      console.log('Adjusted distances:', data); // Debugging output
       setAdjustedDistances(data.golf_clubs);
     } catch (err) {
       console.error('Error fetching adjusted distances:', err.message);
       setError(err.message);
     }
   };
+
 
   useEffect(() => {
     console.log('Updated adjustedDistances:', adjustedDistances); // Log updated state
@@ -139,11 +144,6 @@ export default function CalculationsPage({ token }) {
     <div>
       <h1>Weather Calculations</h1>
       {error && <p style={{ color: 'red' }}>{error}</p>}
-      {location && (
-        <p>
-          <strong>Your Location:</strong> {location.latitude}, {location.longitude}
-        </p>
-      )}
       {weatherData ? (
         <div>
           <h2>Current Weather</h2>
@@ -163,33 +163,44 @@ export default function CalculationsPage({ token }) {
       ) : (
         !error && <p>Loading weather data...</p>
       )}
-      {adjustedDistances.length > 0 ? (
-      <div>
-        <h2>Adjusted Distances</h2>
-        <ul>
-          {adjustedDistances.map((club, index) => (
-            <li key={index}>
-              <strong>{club.club_name}</strong>:
-              <ul>
-                <li>Original Distance: {club.original_distance} yards</li>
-                <li>
-                  Adjusted Distances:
-                  <ul>
-                    {Object.entries(club.adjusted_distance).map(([direction, distance]) => (
-                      <li key={direction}>
-                        {direction}: {distance} yards
-                      </li>
-                    ))}
-                  </ul>
-                </li>
-              </ul>
-            </li>
-          ))}
-        </ul>
-      </div>
-    ) : (
-      !error && <p>Loading adjusted distances...</p>
-    )}
+      {!hasGolfClubs ? (
+        <div>
+          <h2>No Golf Clubs Found</h2>
+          <p>
+            It looks like you haven't added any golf clubs to your bag. Please visit your{' '}
+            <a href="/profile" style={{ color: 'var(--color-primary)', textDecoration: 'underline' }}>
+              profile page
+            </a>{' '}
+            to add your clubs.
+          </p>
+        </div>
+      ) : adjustedDistances.length > 0 ? (
+        <div>
+          <h2>Adjusted Distances</h2>
+          <ul>
+            {adjustedDistances.map((club, index) => (
+              <li key={index}>
+                <strong>{club.club_name}</strong>:
+                <ul>
+                  <li>Original Distance: {club.original_distance} yards</li>
+                  <li>
+                    Adjusted Distances:
+                    <ul>
+                      {Object.entries(club.adjusted_distance).map(([direction, distance]) => (
+                        <li key={direction}>
+                          {direction}: {distance} yards
+                        </li>
+                      ))}
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : (
+        !error && <p>Loading adjusted distances...</p>
+      )}
     </div>
   );
 }

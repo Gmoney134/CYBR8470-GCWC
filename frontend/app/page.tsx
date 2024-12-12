@@ -60,7 +60,7 @@ export default function LoginPage() {
       <Image src={logo} alt="GCWC Logo" className={styles.logo} />
       {/* Application Description */}
       <p className={styles.description}>
-        Welcome to the Golf Club Weather Calculator. Log in to adjust your golf club distances based on real-time weather conditions and optimize your game.
+        Welcome to the Golf Club Weather Calculator. Login to see your golf club distances based on real-time weather conditions to optimize your game.
       </p>
 
       {/* Login Form */}
