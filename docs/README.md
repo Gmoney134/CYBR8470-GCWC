@@ -1,11 +1,11 @@
 # User Stories:
 As a **Golfer**, I want to **View estimated distances of my golf clubs based on the weather in my location** so I can **improve my golf game by having more accurate distances and taking guesswork out of the equation**.
 
-As a **Beta Tester**, I want to **thoroughly use the application for its intended purposes** so I can **ensure that there are no bugs or issues with the application before launch**.
+As a **Admin**, I want to **be able to manage all data and users within the application** so I can **see what is going on in my application and use for dev purposes**.
 ### Acceptance Criteria: 
 **Golfer:** this user story will be done when the application is complete and works without any bugs.
 
-**Beta Tester:** this user story will be done when the application is production ready and has no known bugs or issues.
+**Admin:** this user story will be done when the backend is complete and the admin user works as intedned.
 
 # Mis-user Stories
 As a **Hacker**, I want to **infiltrate the account of other users** so I can **learn location wearabouts of that user**.
