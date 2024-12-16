@@ -130,3 +130,20 @@
     margin-top: 0.5rem;
   }
   
+  .logoutButton,
+.profileButton {
+  margin: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #2ecc71;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.logoutButton:hover,
+.profileButton:hover {
+  background-color: #27ae60;
+}

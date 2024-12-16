@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import styles from './calculations.module.css';
 import { useCallback } from 'react';
+import Link from 'next/link';
 
 const API_BASE_URL = 'http://localhost:8000';
 
@@ -142,6 +143,12 @@ export default function CalculationsPage({ token }) {
     }
   }, [weatherData, fetchAdjustedDistances]);
 
+  const handleLogout = () => {
+    document.cookie = 'token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    window.location.href = '/'; // Redirect to login page after logout
+  };
+
+
   return (
       <div className={styles.pageContainer}>
         <h1 className={styles.title}>Weather Calculations</h1>
@@ -234,6 +241,14 @@ export default function CalculationsPage({ token }) {
           !error && <p>Loading adjusted distances...</p>
         )}
         <div><p>*All distances are in yards*</p></div>
+        <div>
+        <button onClick={handleLogout} className={styles.logoutButton}>
+          Logout
+        </button>
+        <Link href="/profile">
+          <button className={styles.profileButton}>Go to Profile</button>
+        </Link>
       </div>
-    );
-  }
+    </div>
+  );
+}
