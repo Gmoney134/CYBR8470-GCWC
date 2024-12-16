@@ -7,51 +7,46 @@ import Image from 'next/image';
 
 const API_BASE_URL = 'http://backend:8000';
 
-export async function handleLogin(formData) {
-  'use server';
-  let redirectPath = null;
-
-  const { username, password } = Object.fromEntries(formData.entries());
-  const loginUrl = `${API_BASE_URL}/GCWC/login/`;
-
-  try {
-    console.log('Attempting login with URL:', loginUrl);
-    console.log('Payload:', { username, password });
-
-    const response = await fetch(loginUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ username, password }),
-    });
-
-    if (!response.ok) {
-      const error = await response.json();
-      console.error('API Error:', error);
-      throw new Error(error.detail || 'Failed to authenticate');
-    }
-
-    const data = await response.json();
-
-    // Set the cookie securely
-    (await cookies()).set('token', data.access, {
-      path: '/',
-      httpOnly: true,
-    });
-
-    redirectPath = `/profile`;
-  } catch (error) {
-    console.error('Login failed:', error); // Log the full error object
-    throw new Error(`Error during login: ${error.message || 'Unknown error'}. Check console for details.`);
-    redirectPath = `/`;
-  } finally {
-    // Clear resources
-    if (redirectPath) redirect(redirectPath);
-  }
-}
 
 export default function LoginPage() {
+  async function handleLogin(formData) {
+    'use server';
+    const { username, password } = Object.fromEntries(formData.entries());
+    const loginUrl = `${API_BASE_URL}/GCWC/login/`;
+
+    try {
+      console.log('Attempting login with URL:', loginUrl);
+      console.log('Payload:', { username, password });
+
+      const response = await fetch(loginUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        console.error('API Error:', error);
+        throw new Error(error.detail || 'Failed to authenticate');
+      }
+
+      const data = await response.json();
+
+      // Set the cookie securely
+      (await cookies()).set('token', data.access, {
+        path: '/',
+        httpOnly: true,
+      });
+
+      redirect(`/profile`);
+    } catch (error) {
+      console.error('Login failed:', error); // Log the full error object
+      throw new Error(`Error during login: ${error.message || 'Unknown error'}. Check console for details.`);
+    }
+  }
+
   return (
     <div className={styles.pageContainer}>
       {/* Logo */}
@@ -75,4 +70,3 @@ export default function LoginPage() {
     </div>
   );
 }
-
