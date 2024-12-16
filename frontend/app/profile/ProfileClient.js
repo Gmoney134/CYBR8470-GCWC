@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import styles from './profile.module.css'
 
 const API_BASE_URL = 'http://localhost:8000';
 
@@ -82,66 +83,69 @@ export default function ProfileClient({ userProfile, token }) {
   };
 
   return (
-    <div>
-      <h1>Profile</h1>
-      <p><strong>Username:</strong> {userProfile.username}</p>
-      <p><strong>Email:</strong> {userProfile.email}</p>
+    <div className={styles.pageContainer}>
+      {/* Title and Navigation */}
+      <div className={styles.titleContainer}>
+        <h1 className={styles.title}>Profile</h1>
+        <Link href="/calculations">
+          <button className={styles.calculationsButton}>Go to Weather Calculations</button>
+        </Link>
+      </div>
 
-      <h2>Golf Clubs</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      {golfClubs.length > 0 ? (
-        <ul>
-          {golfClubs.map((club) => (
-            <li key={club.id}>
-              {club.club_name} - {club.distance} yards
-              <button onClick={() => removeGolfClub(club.id)} style={{ marginLeft: '10px', color: 'red' }}>
-                Remove
-              </button>
-              <button
-                onClick={() => {
-                  const newName = prompt('Enter new club name:', club.club_name);
-                  const newDistance = prompt('Enter new distance:', club.distance);
-                  if (newName && newDistance) {
-                    editGolfClub(club.id, newName, newDistance);
-                  }
-                }}
-                style={{ marginLeft: '10px', color: 'blue' }}
-              >
-                Edit
-              </button>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No golf clubs in your bag.</p>
-      )}
+      {/* User Data */}
+      <div className={styles.userData}>
+        <p><strong>Username:</strong> {userProfile.username}</p>
+        <p><strong>Email:</strong> {userProfile.email}</p>
+      </div>
 
-      <h2>Add a New Golf Club</h2>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          addGolfClub();
-        }}
-      >
-        <input
-          type="text"
-          value={clubName}
-          onChange={(e) => setClubName(e.target.value)}
-          placeholder="Club Name"
-          required
-        />
-        <input
-          type="number"
-          value={distance}
-          onChange={(e) => setDistance(e.target.value)}
-          placeholder="Distance (yards)"
-          required
-        />
-        <button type="submit">Add Club</button>
-      </form>
-
-      <div style={{ marginTop: '20px' }}>
-        <Link href="/calculations">Go to Weather Calculations</Link>
+      {/* Golf Clubs */}
+      <div className={styles.clubsContainer}>
+        <div className={styles.addClubForm}>
+          <input
+            type="text"
+            value={clubName}
+            onChange={(e) => setClubName(e.target.value)}
+            placeholder="Club Name"
+            required
+          />
+          <input
+            type="number"
+            value={distance}
+            onChange={(e) => setDistance(e.target.value)}
+            placeholder="Distance (yards)"
+            required
+          />
+          <button type="button" onClick={addGolfClub}>Add Club</button>
+        </div>
+        {error && <p style={{ color: 'red' }}>{error}</p>}
+        {golfClubs.length > 0 ? (
+          golfClubs.map((club) => (
+            <div key={club.id} className={styles.clubBox}>
+              <span className={styles.clubDetails}>
+                {club.club_name} - {club.distance} yards
+              </span>
+              <div className={styles.buttonsContainer}>
+                <button
+                  className={styles.editButton}
+                  onClick={() => {
+                    const newName = prompt('Enter new club name:', club.club_name);
+                    const newDistance = prompt('Enter new distance:', club.distance);
+                    if (newName && newDistance) {
+                      editGolfClub(club.id, newName, newDistance);
+                    }
+                  }}
+                >
+                  Edit
+                </button>
+                <button className={styles.removeButton} onClick={() => removeGolfClub(club.id)}>
+                  Remove
+                </button>
+              </div>
+            </div>
+          ))
+        ) : (
+          <p>No golf clubs in your bag.</p>
+        )}
       </div>
     </div>
   );

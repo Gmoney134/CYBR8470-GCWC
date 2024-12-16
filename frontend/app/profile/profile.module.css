@@ -1,0 +1,157 @@
+/* Page container styling */
+.pageContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    gap: 2rem;
+  }
+  
+  /* Title and navigation container */
+  .titleContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 800px;
+  }
+  
+  /* Title styling */
+  .title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #333333;
+    text-align: center;
+  }
+  
+  /* Navigation button */
+  .calculationsButton {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+  
+  .calculationsButton:hover {
+    background-color: #1e7e34;
+    transform: scale(1.05);
+  }
+  
+  /* User data container */
+  .userData {
+    width: 100%;
+    max-width: 800px;
+    padding: 1rem;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .userData p {
+    font-size: 1.1rem;
+    color: #555555;
+  }
+  
+  /* Golf clubs container */
+  .clubsContainer {
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .clubBox {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    padding: 1rem;
+    border: 2px solid #28a745;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .clubBox:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  }
+  
+  .clubDetails {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #333333;
+  }
+  
+  /* Buttons container */
+  .buttonsContainer {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  .editButton,
+  .removeButton {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.8rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+  
+  .editButton {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .editButton:hover {
+    background-color: #0056b3;
+  }
+  
+  .removeButton {
+    background-color: #dc3545;
+    color: white;
+  }
+  
+  .removeButton:hover {
+    background-color: #a71d2a;
+  }
+  
+  /* Add club form */
+  .addClubForm {
+    display: flex;
+    gap: 0.5rem;
+    width: 100%;
+    max-width: 800px;
+  }
+  
+  .addClubForm input {
+    flex: 1;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  .addClubForm button {
+    padding: 0.5rem 1rem;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+  
+  .addClubForm button:hover {
+    background-color: #1e7e34;
+    transform: scale(1.05);
+  }
+  
