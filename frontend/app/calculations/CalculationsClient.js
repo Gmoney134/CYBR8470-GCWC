@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import styles from './calculations.module.css';
 
 const API_BASE_URL = 'http://localhost:8000';
 
@@ -10,7 +11,7 @@ export default function CalculationsPage({ token }) {
   const [adjustedDistances, setAdjustedDistances] = useState([]);
   const [error, setError] = useState(null);
   const [hasGolfClubs, setHasGolfClubs] = useState(true);
-  
+  const [selectedDirection, setSelectedDirection] = useState('N');
 
   const fetchWeatherData = async (latitude, longitude) => {
     try {
@@ -141,66 +142,97 @@ export default function CalculationsPage({ token }) {
   }, [weatherData]);
 
   return (
-    <div>
-      <h1>Weather Calculations</h1>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      {weatherData ? (
-        <div>
-          <h2>Current Weather</h2>
-          <p>
-            <strong>Temperature:</strong> {weatherData.temperature} F
-          </p>
-          <p>
-            <strong>Wind Speed:</strong> {weatherData.windSpeed}
-          </p>
-          <p>
-            <strong>Wind Direction:</strong> {weatherData.windDirection}
-          </p>
-          <p>
-            <strong>Humidity:</strong> {weatherData.humidity}%
-          </p>
+      <div className={styles.pageContainer}>
+        <h1 className={styles.title}>Weather Calculations</h1>
+        
+        {error && <p style={{ color: 'red' }}>{error}</p>}
+  
+        {weatherData ? (
+          <div className={styles.weatherBar}>
+          <div className={styles.weatherItem}>
+            <strong>Temperature:</strong>
+            <span>{weatherData.temperature}°F</span>
+          </div>
+          <div className={styles.divider}></div>
+          <div className={styles.weatherItem}>
+            <strong>Wind:</strong>
+            <span>{weatherData.windSpeed} {weatherData.windDirection}</span>
+          </div>
+          <div className={styles.divider}></div>
+          <div className={styles.weatherItem}>
+            <strong>Humidity:</strong>
+            <span>{weatherData.humidity}%</span>
+          </div>
         </div>
-      ) : (
-        !error && <p>Loading weather data...</p>
-      )}
-      {!hasGolfClubs ? (
-        <div>
-          <h2>No Golf Clubs Found</h2>
-          <p>
-            It looks like you haven't added any golf clubs to your bag. Please visit your{' '}
-            <a href="/profile" style={{ color: 'var(--color-primary)', textDecoration: 'underline' }}>
-              profile page
-            </a>{' '}
-            to add your clubs.
-          </p>
-        </div>
-      ) : adjustedDistances.length > 0 ? (
-        <div>
-          <h2>Adjusted Distances</h2>
-          <ul>
-            {adjustedDistances.map((club, index) => (
-              <li key={index}>
-                <strong>{club.club_name}</strong>:
-                <ul>
-                  <li>Original Distance: {club.original_distance} yards</li>
-                  <li>
-                    Adjusted Distances:
-                    <ul>
-                      {Object.entries(club.adjusted_distance).map(([direction, distance]) => (
-                        <li key={direction}>
-                          {direction}: {distance} yards
-                        </li>
-                      ))}
-                    </ul>
-                  </li>
-                </ul>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ) : (
-        !error && <p>Loading adjusted distances...</p>
-      )}
-    </div>
-  );
-}
+        ) : (
+          !error && <p>Loading weather data...</p>
+        )}
+  
+        {!hasGolfClubs ? (
+          <div>
+            <h2>No Golf Clubs Found</h2>
+            <p>
+              It looks like you haven't added any golf clubs to your bag. Please visit your{' '}
+              <a href="/profile" className={styles.link}>
+                profile page
+              </a>{' '}
+              to add your clubs.
+            </p>
+          </div>
+        ) : adjustedDistances.length > 0 ? (
+          <div>
+            <h2 className={styles.title}>Adjusted Distances</h2>
+            {/* Dropdown for Direction Selection */}
+            <div className={styles.dropdownContainer}>
+              <label htmlFor="directionSelect" className={styles.dropdownLabel}>
+                Select Facing Direction:
+              </label>
+              <select
+                id="directionSelect"
+                className={styles.dropdown}
+                value={selectedDirection}
+                onChange={(e) => setSelectedDirection(e.target.value)}
+              >
+                <option value="N">North</option>
+                <option value="NNE">North-Northeast</option>
+                <option value="NE">Northeast</option>
+                <option value="ENE">East-Northeast</option>
+                <option value="E">East</option>
+                <option value="ESE">East-Southeast</option>
+                <option value="SE">Southeast</option>
+                <option value="SSE">South-Southeast</option>
+                <option value="S">South</option>
+                <option value="SSW">South-Southwest</option>
+                <option value="SW">Southwest</option>
+                <option value="WSW">West-Southwest</option>
+                <option value="W">West</option>
+                <option value="WNW">West-Northwest</option>
+                <option value="NW">Northwest</option>
+                <option value="NNW">North-Northwest</option>
+              </select>
+            </div>
+  
+            {/* Club Distances */}
+            <div className={styles.clubsContainer}>
+              {adjustedDistances.map((club, index) => (
+                <div key={index} className={styles.clubBox}>
+                  <div className={styles.clubName}>
+                    {club.club_name}
+                    <span className={styles.adjustedDistance}>
+                      {club.adjusted_distance[selectedDirection]}
+                    </span>
+                  </div>
+                  <div className={styles.originalDistance}>
+                    Original: {club.original_distance}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : (
+          !error && <p>Loading adjusted distances...</p>
+        )}
+        <div><p>*All distances are in yards*</p></div>
+      </div>
+    );
+  }

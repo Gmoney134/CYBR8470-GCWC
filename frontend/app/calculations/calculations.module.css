@@ -1,0 +1,132 @@
+/* Page Container */
+.pageContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    gap: 2rem;
+    min-height: 100vh;
+  }
+  
+  /* Title Styling */
+  .title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-align: center;
+    color: #333333;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Weather Bar */
+  .weatherBar {
+    width: 100%;
+    max-width: 800px;
+    background-color: #28a745;
+    color: white;
+    padding: 1rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    font-size: 1.2rem;
+    display: flex; /* Flexbox for row layout */
+    justify-content: space-between; /* Space out the elements */
+    align-items: center; /* Vertically center the elements */
+    gap: 1rem;
+  }
+  
+  /* Individual weather data items */
+  .weatherItem {
+    font-size: 1.1rem;
+    text-align: center;
+    flex: 1; /* Ensure equal width for all items */
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Divider styling */
+.divider {
+    width: 2px;
+    height: 100%;
+    background-color: white;
+    opacity: 0.6; /* Slightly transparent for a subtle look */
+  }
+  
+  /* Dropdown Menu */
+  .dropdownContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .dropdownLabel {
+    font-size: 1.1rem;
+    color: #555555;
+  }
+  
+  .dropdown {
+    width: 200px;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 2px solid #28a745;
+    border-radius: 5px;
+    background-color: white;
+    color: #333333;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .dropdown:hover {
+    border-color: #1e7e34;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Club Box Container */
+  .clubsContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    width: 100%;
+    max-width: 800px;
+    margin-top: 1rem;
+  }
+  
+  /* Individual Club Box */
+  .clubBox {
+    background-color: white;
+    border: 2px solid #28a745;
+    border-radius: 10px;
+    padding: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .clubBox:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Club Name */
+  .clubName {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #333333;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Adjusted Distance */
+  .adjustedDistance {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #28a745;
+    margin-left: 1rem;
+  }
+  
+  /* Original Distance */
+  .originalDistance {
+    font-size: 1rem;
+    color: #555555;
+    margin-top: 0.5rem;
+  }
+  
