@@ -12,6 +12,10 @@ export default function ProfileClient({ userProfile, token }) {
   const [distance, setDistance] = useState('');
   const [error, setError] = useState(null);
 
+  const handleLogout = () => {
+    document.cookie = 'token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    window.location.href = '/'; // Redirect to login page after logout
+  };
 
   const addGolfClub = async () => {
     try {
@@ -84,6 +88,9 @@ export default function ProfileClient({ userProfile, token }) {
 
   return (
     <div className={styles.pageContainer}>
+      <button onClick={handleLogout} className={styles.logoutButton}>
+        Logout
+      </button>
       {/* Title and Navigation */}
       <div className={styles.titleContainer}>
         <h1 className={styles.title}>Profile</h1>
