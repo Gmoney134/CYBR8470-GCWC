@@ -1,5 +1,4 @@
 import { cookies } from 'next/headers';
-import Link from 'next/link';
 import ProfileClient from './ProfileClient'; // Import a client component
 
 const API_BASE_URL = 'http://backend:8000';

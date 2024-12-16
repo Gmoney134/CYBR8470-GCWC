@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import styles from './calculations.module.css';
+import { useCallback } from 'react';
 
 const API_BASE_URL = 'http://localhost:8000';
 
 export default function CalculationsPage({ token }) {
-  const [location, setLocation] = useState(null);
+  const [, setLocation] = useState(null);
   const [weatherData, setWeatherData] = useState(null);
   const [adjustedDistances, setAdjustedDistances] = useState([]);
   const [error, setError] = useState(null);
@@ -79,7 +80,7 @@ export default function CalculationsPage({ token }) {
     }
   };
   
-  const fetchAdjustedDistances = async () => {
+  const fetchAdjustedDistances = useCallback(async () => {
     if (!weatherData) {
       setError('Weather data is not available.');
       return;
@@ -110,7 +111,7 @@ export default function CalculationsPage({ token }) {
       console.error('Error fetching adjusted distances:', err.message);
       setError(err.message);
     }
-  };
+  }, [weatherData, token]);
 
 
   useEffect(() => {
@@ -139,7 +140,7 @@ export default function CalculationsPage({ token }) {
     if (weatherData) {
       fetchAdjustedDistances();
     }
-  }, [weatherData]);
+  }, [weatherData, fetchAdjustedDistances]);
 
   return (
       <div className={styles.pageContainer}>
@@ -172,7 +173,7 @@ export default function CalculationsPage({ token }) {
           <div>
             <h2>No Golf Clubs Found</h2>
             <p>
-              It looks like you haven't added any golf clubs to your bag. Please visit your{' '}
+              It looks like you haven&apos;t added any golf clubs to your bag. Please visit your{' '}
               <a href="/profile" className={styles.link}>
                 profile page
               </a>{' '}
