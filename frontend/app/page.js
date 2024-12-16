@@ -7,10 +7,10 @@ import Image from 'next/image';
 
 const API_BASE_URL = 'http://backend:8000';
 
-
 export default function LoginPage() {
   async function handleLogin(formData) {
     'use server';
+    let redirectPath = null;
     const { username, password } = Object.fromEntries(formData.entries());
     const loginUrl = `${API_BASE_URL}/GCWC/login/`;
 
@@ -40,13 +40,15 @@ export default function LoginPage() {
         httpOnly: true,
       });
 
-      redirect(`/profile`);
+      redirectPath = '/profile'; // Redirect to profile page on success
     } catch (error) {
       console.error('Login failed:', error); // Log the full error object
       throw new Error(`Error during login: ${error.message || 'Unknown error'}. Check console for details.`);
+    } finally {
+      // Ensure redirect occurs even after error handling
+      if (redirectPath) redirect(redirectPath);
     }
   }
-
   return (
     <div className={styles.pageContainer}>
       {/* Logo */}
