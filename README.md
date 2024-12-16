@@ -6,10 +6,16 @@ First make sure that docker is running and you are in the CYBR8470-GCWC director
 To install and run the Golf Club Calculator run the following commands:
 ```bash
 docker compose build
+docker compose up
+```
+Once the commands have run successfully open http://localhost:3000 to see application.
+
+If that does not work try running:
+```bash
 docker compose up -d
 docker-compose exec web python manage.py migrate
 ```
-Once the commands have run successfully open http://localhost:8000 to see application.
+if the migrations run successfully that app should be working now on http://localhost:3000, if not kill the process and try the two commands at the top of the install section.
 See in-app menus for help imputing information or using specific features.
 
 # License
