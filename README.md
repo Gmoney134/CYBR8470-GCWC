@@ -1,6 +1,8 @@
 # Golf Club Weather Calculator:
 The Golf club Weather Calculator is an application that makes weather based decisions in your golf game for you. The Golf Club Weather Calculator takes the user's input of what clubs they are using and how far the user hits those clubs in perfect conditions and makes calculations of how far the user will hit that club based on weather at the user's current location and direction the user is facing. This application makes it so there is no more guesswork when it comes to choosing what club to hit based on the weather.
 
+You can see the production version by visting https://cybr-8470-gcwc-jusd.vercel.app/ (This is just the frontend of the project right now backend is not deployed so app will not work on that page at the moment)
+
 ## Installation/Getting started
 First make sure that docker is running and you are in the CYBR8470-GCWC directory.
 To install and run the Golf Club Calculator run the following commands:
