@@ -1,3 +1,5 @@
+// Portions of this code were generated/reference from ChatGPT
+
 import { redirect } from 'next/navigation';
 import styles from '../page.module.css';
 

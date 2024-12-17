@@ -1,9 +1,11 @@
+#Portions of this were generated/referenced from Chatgpt
+
 from django.contrib.auth.models import User
 from rest_framework import viewsets, permissions
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.viewsets import ViewSet
-from rest_framework import status # type: ignore
+from rest_framework import status
 from .serializers import UserSerializer, GolfClubSerializer, UserProfileSerializer, GolfClubCalculationSerializer
 from .models import GolfClub
 import math
@@ -82,21 +84,17 @@ def parse_windSpeed(windSpeed_input):
     """
     Parse wind speed input and return the average wind speed as a float.
 
-    Parameters:
-    - windSpeed_input (str): Wind speed in formats like '12 mph' or '8 to 12 mph'.
-
     Returns:
     - float: Average wind speed.
     """
     try:
-        # Match ranges like "8 to 12 mph" or single values like "12 mph"
         match = re.match(r"(\d+)(?:\s*to\s*(\d+))?\s*mph", windSpeed_input.lower())
         if not match:
             raise ValueError("Invalid wind speed format. Use formats like '12 mph' or '8 to 12 mph'.")
 
         lower_speed = float(match.group(1))
         upper_speed = float(match.group(2)) if match.group(2) else lower_speed
-        return (lower_speed + upper_speed) / 2  # Return average speed for ranges
+        return (lower_speed + upper_speed) / 2
     except Exception as e:
         raise ValueError(f"Error parsing wind speed: {e}")
 
@@ -164,12 +162,6 @@ class CalculationsViewSet(ViewSet):
     def create(self, request):
         """
         Calculate adjusted distances for the user's golf clubs.
-        Input:
-        - temperature (float): Current temperature (°F).
-        - windSpeed (float): Wind speed (mph).
-        - windDirection (str): Direction the wind is blowing (e.g., 'N', 'NE').
-        - facing_direction (str): Direction the golfer is facing (e.g., 'N', 'NE').
-        - humidity (float): Relative humidity as a percentage (0-100).
 
         Returns:
         - List of golf clubs with original and adjusted distances.

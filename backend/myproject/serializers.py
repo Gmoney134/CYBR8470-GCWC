@@ -1,3 +1,5 @@
+# Portions of this code were generated/referenced from Chatgpt
+
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from .models import GolfClub

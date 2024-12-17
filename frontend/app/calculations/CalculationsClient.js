@@ -1,3 +1,4 @@
+// Portions of this code were generated/reference from ChatGPT
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -17,6 +18,7 @@ export default function CalculationsPage({ token }) {
 
   const fetchWeatherData = async (latitude, longitude) => {
     try {
+      // fetch forcastURL from NWS api
       const pointsResponse = await fetch(`https://api.weather.gov/points/${latitude},${longitude}`, {
         headers: {
           'User-Agent': 'Test/1.0 (nichter.grant@gmail.com)',
@@ -100,7 +102,7 @@ export default function CalculationsPage({ token }) {
         const errorText = await response.text();
         console.error('Response body:', errorText);
         if (response.status === 404 && errorText.includes('No golf clubs')) {
-          setHasGolfClubs(false); // Update state to indicate no golf clubs
+          setHasGolfClubs(false);
           return;
         }
         throw new Error(`Calculations API request failed with status: ${response.status}`);
@@ -116,7 +118,7 @@ export default function CalculationsPage({ token }) {
 
 
   useEffect(() => {
-    console.log('Updated adjustedDistances:', adjustedDistances); // Log updated state
+    console.log('Updated adjustedDistances:', adjustedDistances);
   }, [adjustedDistances]);
 
   useEffect(() => {
@@ -145,7 +147,7 @@ export default function CalculationsPage({ token }) {
 
   const handleLogout = () => {
     document.cookie = 'token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-    window.location.href = '/'; // Redirect to login page after logout
+    window.location.href = '/'; 
   };
 
 

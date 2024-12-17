@@ -1,3 +1,5 @@
+// Portions of this code were generated/reference from ChatGPT
+
 'use client';
 
 import { useState } from 'react';

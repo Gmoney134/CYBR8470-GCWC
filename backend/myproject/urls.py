@@ -6,7 +6,7 @@ from .views import UserViewSet, AdminViewSet, ProfileViewSet, CalculationsViewSe
 
 # Initialize the DefaultRouter
 router = DefaultRouter()
-router.register(r'GCWC/users', UserViewSet, basename='user')  # User registration and retrieval
+router.register(r'GCWC/users', UserViewSet, basename='user')  # User registration and retrieval with admin acc
 router.register(r'GCWC/admin', AdminViewSet, basename='admin')  # Admin-only routes
 router.register(r'GCWC/profile', ProfileViewSet, basename='profile')
 router.register(r'GCWC/calculations', CalculationsViewSet, basename='calculations')
